@@ -1,0 +1,37 @@
+--Create a video game store database
+
+CREATE TABLE store (id INTEGER PRIMARY KEY, product TEXT, aisle TEXT, price INTEGER, purchase_frequency_month INTEGER);
+
+INSERT INTO store VALUES (1, "PS4", 3, 299, 12);
+INSERT INTO store VALUES (2, "XBOX 1", 1, 289, 15);
+INSERT INTO store VALUES (3, "Nintendo Switch", 2, 295, 20);
+INSERT INTO store VALUES (4, "PS5", 4, 499, 5);
+INSERT INTO store VALUES (5, "XBOX Series X", 5, 499, 3);
+INSERT INTO store VALUES (6, "PS4 Controller", 3, 45, 7);
+INSERT INTO store VALUES (7, "XBOX 1 Controller", 1, 35, 4);
+INSERT INTO store VALUES (8, "Nintendo Switch Controller", 2, 50, 5);
+INSERT INTO store VALUES (9, "PS5 Controller", 4, 65, 5);
+INSERT INTO store VALUES (10, "XBOX Series X Controller", 5, 64.99, 3);
+INSERT INTO store VALUES (11, "GTA 5", 3, 24.99, 3);
+INSERT INTO store VALUES (12, "GTA 5", 1, 19.99, 5);
+INSERT INTO store VALUES (13, "GTA 5", 4, 59.99, 7);
+INSERT INTO store VALUES (14, "GTA 5", 5, 55.99, 4);
+INSERT INTO store VALUES (15, "Mario Kart 8 Deluxe", 2, 49.99, 8);
+
+--Display the database information
+SELECT * FROM store;
+
+--Where are each gaming items located in the aisles?
+SELECT * FROM store ORDER BY aisle;
+
+--What are the items listed by price?
+SELECT * FROM store ORDER BY price;
+
+--What is the most purchased item for the previous month?
+SELECT id, product, MAX(purchase_frequency_month) FROM store;
+
+--What is the least purchased item for the previous month?
+SELECT id, product, MIN(purchase_frequency_month) FROM store;
+
+--What aisle can I find a copy of GTA 5 for the PS5?
+SELECT id, aisle FROM store WHERE id = 13
