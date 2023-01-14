@@ -1,0 +1,81 @@
+/* Create table about the people and what they do here */
+
+CREATE TABLE famous_people (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    fullname TEXT, 
+    age INTEGER, 
+    nationality TEXT);
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Kevin Durant", 34, "US");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Clint Dempsey", 39, "US");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Cristiano Ronaldo", 37, "Portugal");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Giannis Antetokounmpo", 28, "Greece");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Simone Biles", 25, "US");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Sunisa Lee", 19, "US");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Rafael Nadal", 36, "Spain");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Lecrae Moore", 43, "US");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("David Guetta", 55, "France");
+
+INSERT INTO famous_people (fullname, age, nationality) VALUES ("Benito Antonio Martinez Ocasio", 28, "Puerto Rico");
+
+CREATE TABLE occupation (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    famous_people_id TEXT,
+    job TEXT,
+    career_length_years INTEGER,
+    net_worth_usdollars INTEGER,
+    still_active TEXT);
+    
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (1, "Basketball", 15, 200000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (2, "Football", 14, 16000000, "Retired") ;
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (3, "Football", 20, 490000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (4, "Basketball", 11, 110000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES( 5, "Gymnastics", 8, 16000000, "Pending");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (6, "Gymnastics", 3, 2000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES ( 7, "Tennis", 21, 220000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (8, "Music", 18, 2000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (9, "Music", 36, 150000000, "Active");
+
+INSERT INTO occupation (famous_people_id, job, career_length_years, net_worth_usdollars, still_active) VALUES (10, "Music", 9, 400000000, "Active");
+
+--Query a list with name, age, job, career length, and net worth. Order by greatest net worth.
+
+SELECT a.fullname, a.age, b.job, b.career_length_years, b.net_worth_usdollars
+FROM famous_people AS a
+JOIN occupation AS b
+ON a.id = b.famous_people_id
+GROUP BY a.fullname
+ORDER BY b.net_worth_usdollars DESC;
+
+--Query a list with name, age, job, career length, and net worth where job = Football and career length > 15
+
+SELECT a.fullname, a.age, b.job, b.career_length_years, b.net_worth_usdollars
+FROM famous_people AS a
+JOIN occupation AS b
+ON a.id = b.famous_people_id
+WHERE b.job = "Football" AND b.career_length_years > 15;
+
+--Who are the weathliest people not from the US. Query with full name, job, net worth, and country.
+
+SELECT a.fullname, b.job, b.net_worth_usdollars, a.nationality
+FROM famous_people AS a 
+JOIN occupation AS b
+ON a.id = b.famous_people_id
+WHERE NOT a.nationality  = "US"
+ORDER BY b.net_worth_usdollars DESC;
