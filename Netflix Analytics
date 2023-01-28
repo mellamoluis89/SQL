@@ -31,3 +31,49 @@ FROM "CharlotteChaze/BreakIntoTech"."netflix_titles_info"
 WHERE type = 'Movie'
 ORDER BY release_year ASC
 LIMIT 1;
+
+#6.Which locations in New York received at least 3 orders in January, and how many orders did they each receive?
+SELECT DISTINCT location, COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE location LIKE '%NY%'
+AND LENGTH(orderid) =6
+AND orderid <> 'Order ID'
+GROUP BY location
+HAVING COUNT(orderID) >2;
+
+#7.How many of each type of headphone were sold in February?
+SELECT Product, SUM(Quantity)
+FROM BIT_DB.FebSales
+WHERE Product LIKE '%Headphones%'
+GROUP BY Product;
+
+#8.What was the average amount spent per account in February?
+SELECT SUM(a.Quantity*a.price)/ COUNT(b.acctnum)
+FROM BIT_DB.FebSales AS a
+JOIN BIT_DB.customers AS b
+ON a.orderID = b.order_id
+WHERE LENGTH(orderid) = 6
+AND orderid<> 'Order ID';
+
+--##Solution 2
+SELECT AVG(Quantity*price)
+FROM BIT_DB.FebSales AS a
+JOIN BIT_DB.customers AS b
+ON a.orderID = b.order_id
+WHERE LENGTH(orderid) = 6
+AND orderid<> 'Order ID';
+
+#9.What was the average quantity of products purchased per account in February?
+SELECT SUM(a.Quantity)/COUNT(b.acctnum)
+FROM BIT_DB.FebSales AS a
+JOIN BIT_DB.customers AS b
+ON a.orderID = b.order_id
+WHERE LENGTH(orderid)=6
+AND orderid <> 'Order ID';
+
+#10.Which product brought in the most revenue in January and how much revenue did it bring in total?
+SELECT Product, SUM(Quantity*price) AS Total_rev
+FROM BIT_DB.JanSales
+GROUP BY Product
+ORDER BY Total_Rev DESC
+LIMIT 1;
