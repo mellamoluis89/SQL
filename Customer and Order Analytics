@@ -26,38 +26,49 @@ AND b.orderID <> 'Order ID';
 
 --4.Which product was the cheapest one sold in January, and what was the price?
 
-SELECT DISTINCT Product, MIN(price)
+SELECT Product, price
 FROM BIT_DB.JanSales
+WHERE LENGTH(orderID) = 6
+AND orderID <> 'Order ID'
 GROUP BY Product, price
-ORDER BY price
+ORDER BY price ASC
 LIMIT 1;
+
+---OR Solution 2
+
+SELECT Product, MIN(price)
+FROM BIT_DB.JanSales
+WHERE LENGTH(orderId) = 6
+AND orderID <> 'Order ID';
 
 
 --5.What is the total revenue for each product sold in January? (Revenue can be calculated using the number of products sold and the price of the products).
 
-SELECT Product, SUM(Quantity)*price AS Total_Revenue
+SELECT DISTINCT Product, ROUND(SUM(Quantity) * price,2) AS total_revenue
 FROM BIT_DB.JanSales
+WHERE LENGTH(orderId) = 6
+AND orderID <> 'Order ID'
 GROUP BY Product
-ORDER BY Total_Revenue ASC;
+ORDER BY total_revenue ASC;
 
 --6.Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
 
-SELECT Product, SUM(Quantity), SUM(Quantity)*price AS Revenue
+SELECT DISTINCT Product, SUM(Quantity), ROUND(SUM(Quantity) * price,2) AS total_revenue
 FROM BIT_DB.FebSales
 WHERE location = '548 Lincoln St, Seattle, WA 98101';
 
 --7.How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
 
-SELECT COUNT(DISTINCT a.acctnum),AVG(b.Quantity*b.price)
-FROM BIT_DB.customers AS a
-JOIN BIT_DB.FebSales AS b
-ON a.order_id = b.orderID
-WHERE b.Quantity > 2
-AND LENGTH(orderID) = 6
+SELECT COUNT(DISTINCT acctnum) AS cust_orders, ROUND(AVG(Quantity*price),2) AS avg_spent
+FROM BIT_DB.FebSales AS feb
+INNER JOIN BIT_DB.customers cust
+ON feb.orderID = cust.order_id
+WHERE Quantity > 2
+AND LENGTH(orderId) = 6
 AND orderID <> 'Order ID';
 
 --8.List all the products sold in Los Angeles in February, and include how many of each were sold.
-SELECT Product, SUM(Quantity)
+SELECT DISTINCT Product, SUM(Quantity)
 FROM BIT_DB.FebSales
 WHERE location LIKE '%Los Angeles%'
 GROUP BY Product;
