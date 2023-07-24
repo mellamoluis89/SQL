@@ -1,0 +1,93 @@
+---1. Who was the highest scoring player by average for the regular season?
+SELECT Player, MAX(PTS)
+FROM player_stats_regular22;
+
+---2. Who are the youngest players in the NBA?
+SELECT Player, Age
+FROM player_stats_regular22
+ORDER BY Age
+LIMIT 3;
+
+---3. Who are teh oldest players in the NBA?
+SELECT Player, Age
+FROM player_stats_regular22
+ORDER BY Age DESC
+LIMIT 1;
+
+---OR
+SELECT Player, MAX(Age)
+FROM player_stats_regular22;
+
+---4. Who had the highest scoring average during the playoffs?
+SELECT Player, PTS
+FROM player_stats_playoffs22
+ORDER BY PTS DESC
+LIMIT 1;
+
+---OR
+SELECT Player, MAX(PTS)
+FROM player_stats_playoffs22;
+
+---5. Who had the highest 3 point percentage during the playoffs where they attempted at least 5 per game?
+SELECT Player, Three_P_Percent *100, Three_PA
+FROM player_stats_playoffs22
+WHERE Three_PA >=5
+ORDER BY Three_P_Percent DESC
+LIMIT 1;
+
+---6. Who were the top ten 3 point percentage shooters during the regular season where they attempted at least 3 per game?
+SELECT Player, Three_P_Percent * 100, Three_PA
+FROM player_stats_regular22
+WHERE Three_PA >= 3
+GROUP BY Player
+ORDER BY Three_P_Percent DESC
+LIMIT 3;
+
+---7. Which Boston Celtics player played the most games during the regular season?
+
+SELECT *
+FROM player_stats_regular22
+WHERE Team = 'BOS'
+ORDER BY GP DESC
+;
+
+---8. Show all stats for the Dallas Mavs players during the playoffs.
+SELECT *
+FROM player_stats_playoffs22
+WHERE Team = 'DAL';
+
+---9. Who are the top 10 players with the most games played during the 22 season (playoffs included)?
+SELECT Player, reg.GP + play.GP AS total_gp
+FROM player_stats_playoffs22 AS play
+INNER JOIN player_stats_regular22 AS reg
+ON play.Player = reg.Player
+GROUP BY reg.Player
+ORDER BY reg.GP+play.GP DESC
+LIMIT 10;
+
+---10.Which guard had the most defensive rebounds during the playoffs and regular season?
+SELECT Player, MAX(reg.DRB + play.DRB) AS total_DRB, reg.Pos
+FROM player_stats_playoffs22 AS play
+INNER JOIN player_stats_regular22 AS reg
+ON play.Player = reg.Player
+WHERE reg.Pos = 'G'
+OR reg.Pos = 'SG';
+
+---OR
+
+SELECT Player, reg.DRB + play.DRB AS total_DRB, reg.Pos
+FROM player_stats_playoffs22 AS play
+INNER JOIN player_stats_regular22 AS reg
+ON play.Player = reg.Player
+WHERE reg.Pos = 'G'
+OR reg.Pos = 'SG'
+GROUP BY reg.Player
+ORDER BY reg.DRB + play.DRB DESC
+LIMIT 1;
+
+---11. Who had the highest FT percentage during the playoffs by position who attempted more than 5 per game?
+SELECT Pos, Player, MAX(FT_Percent) *100 AS FT_Percentage, FTA
+FROM player_stats_playoffs22
+WHERE Pos IN('C', 'PG', 'PF', 'SF', 'SG')
+AND FTA > 5
+GROUP BY Pos;
